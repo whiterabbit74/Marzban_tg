@@ -14,16 +14,11 @@ UVICORN_UDS = config("UVICORN_UDS", default=None)
 UVICORN_SSL_CERTFILE = config("UVICORN_SSL_CERTFILE", default=None)
 UVICORN_SSL_KEYFILE = config("UVICORN_SSL_KEYFILE", default=None)
 UVICORN_SSL_CA_TYPE = config("UVICORN_SSL_CA_TYPE", default="public").lower()
-DASHBOARD_PATH = config("DASHBOARD_PATH", default="/dashboard/")
 
 DEBUG = config("DEBUG", default=False, cast=bool)
 DOCS = config("DOCS", default=False, cast=bool)
 
 ALLOWED_ORIGINS = config("ALLOWED_ORIGINS", default="*").split(",")
-
-VITE_BASE_API = f"http://127.0.0.1:{UVICORN_PORT}/api/" \
-    if DEBUG and config("VITE_BASE_API", default="/api/") == "/api/" \
-    else config("VITE_BASE_API", default="/api/")
 
 XRAY_JSON = config("XRAY_JSON", default="./xray_config.json")
 XRAY_FALLBACKS_INBOUND_TAG = config("XRAY_FALLBACKS_INBOUND_TAG", cast=str, default="") or config(

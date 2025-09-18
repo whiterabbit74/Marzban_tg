@@ -81,13 +81,14 @@
 
 Marzban (the Persian word for "border guard" - pronounced /mærz'ban/) is a proxy management tool that provides a simple and easy-to-use user interface for managing hundreds of proxy accounts powered by [Xray-core](https://github.com/XTLS/Xray-core) and built using Python and Reactjs.
 
+> **Note:** This fork removes the web dashboard and statics bundle. Management is performed through the REST API, Telegram bot, or CLI.
+
 ## Why using Marzban?
 
 Marzban is user-friendly, feature-rich and reliable. It lets you to create different proxies for your users without any complicated configuration. Using its built-in web UI, you are able to monitor, modify and limit users.
 
 ### Features
 
-- Built-in **Web UI**
 - Fully **REST API** backend
 - [**Multiple Nodes**](#marzban-node) support (for infrastructure distribution & scalability)
 - Supports protocols **Vmess**, **VLESS**, **Trojan** and **Shadowsocks**
@@ -131,26 +132,15 @@ Once the installation is complete:
 - The Marzban files will be located at `/opt/marzban`
 - The configuration file can be found at `/opt/marzban/.env` (refer to [configurations](#configuration) section to see variables)
 - The data files will be placed at `/var/lib/marzban`
-- For security reasons, the Marzban dashboard is not accessible via IP address. Therefore, you must [obtain SSL certificate](https://gozargah.github.io/marzban/en/examples/issue-ssl-certificate) and access your Marzban dashboard by opening a web browser and navigating to `https://YOUR_DOMAIN:8000/dashboard/` (replace YOUR_DOMAIN with your actual domain)
-- You can also use SSH port forwarding to access the Marzban dashboard locally without a domain. Replace `user@serverip` with your actual SSH username and server IP and Run the command below:
+- This distribution does not include the original web dashboard. All administration should be done through the CLI or the integrated Telegram bot.
 
-```bash
-ssh -L 8000:localhost:8000 user@serverip
-```
-
-Finally, you can enter the following link in your browser to access your Marzban dashboard:
-
-http://localhost:8000/dashboard/
-
-You will lose access to the dashboard as soon as you close the SSH terminal. Therefore, this method is recommended only for testing purposes.
-
-Next, you need to create a sudo admin for logging into the Marzban dashboard by the following command
+Next, you may create a sudo admin for CLI/API access by running the following command
 
 ```bash
 marzban cli admin create --sudo
 ```
 
-That's it! You can login to your dashboard using these credentials
+That's it! You can use these credentials with the CLI or any API client
 
 To see the help message of the Marzban script, run the following command
 
@@ -232,7 +222,7 @@ server {
     ssl_certificate      /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key  /etc/letsencrypt/live/example.com/privkey.pem;
 
-    location ~* /(dashboard|statics|sub|api|docs|redoc|openapi.json) {
+    location ~* /(sub|api|docs|redoc|openapi.json) {
         proxy_pass http://0.0.0.0:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -279,7 +269,7 @@ server {
 }
 ```
 
-By default the app will be run on `http://localhost:8000/dashboard`. You can configure it using changing the `UVICORN_HOST` and `UVICORN_PORT` environment variables.
+By default the API will be exposed on `http://localhost:8000/api/`. You can configure it by changing the `UVICORN_HOST` and `UVICORN_PORT` environment variables.
 </details>
 
 # Configuration
